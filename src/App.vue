@@ -39,11 +39,7 @@
             <th>コメント</th>
             <th>状態</th>
           </tr>
-          <tr
-            v-for="(task, index) in tasks"
-            :key="index"
-            :class="displayTask(task)"
-          >
+          <tr v-for="(task, index) in filterTasks" :key="index">
             <td>{{ task.id }}</td>
             <td>{{ task.comment }}</td>
             <td>
@@ -100,16 +96,14 @@ export default {
     },
   },
   computed: {
-    displayTask() {
-      return task => {
-        if (this.selectedStatus === "doing") {
-          return task.status === "完了" ? { inactive: true } : "";
-        } else if (this.selectedStatus === "done") {
-          return task.status === "作業中" ? { inactive: true } : "";
-        } else {
-          return "";
-        }
-      };
+    filterTasks() {
+      if (this.selectedStatus === "doing") {
+        return this.tasks.filter(task => task.status === "作業中");
+      } else if (this.selectedStatus === "done") {
+        return this.tasks.filter(task => task.status === "完了");
+      } else {
+        return this.tasks;
+      }
     },
   },
 };
